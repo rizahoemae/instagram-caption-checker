@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Instagram Caption Checker</title>
+  </head>
+  <body>
+    <textarea name="" id="inputText" cols="30" rows="10"></textarea>
+    <button onclick="checkCaption()">Submit</button>
+    <p id="adadeh" style="visibility: hidden">ini nilainya</p>
+  </body>
+  <script>
+    var txt = document.getElementById("inputText");
+    function checkCaption() {
+      const regex = /\W(\#[a-zA-Z]+\b)(?!;)|(\B@\w+)/gm;
+      const str = txt.value;
+      let m;
+      let hashtag = 0;
+      let username = 0;
+
+      while ((m = regex.exec(str)) !== null) {
+        // This is necessary to avoid infinite loops with zero-width matches
+        if (m.index === regex.lastIndex) {
+          regex.lastIndex++;
+        }
+
+        // The result can be accessed through the `m`-variable.
+        m.forEach((match, groupIndex) => {
+          if (groupIndex == 1 && match != undefined) {
+            hashtag++;
+          } else if (groupIndex == 2 && match != undefined) {
+            username++;
+          }
+        });
+      }
+			console.log(`Characters long: ${str.length} / 2200 `);
+      console.log(`Hashtag tagged: ${hashtag} / 30 `);
+      console.log(`Username tagged: ${username} / 20`);
+    }
+  </script>
+</html>
