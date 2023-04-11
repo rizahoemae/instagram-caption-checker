@@ -5,16 +5,67 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Instagram Caption Checker</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.4.js"
+      integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
+      crossorigin="anonymous"
+    ></script>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.css"
+      rel="stylesheet"
+    />
   </head>
-  <body>
-    <textarea name="" id="inputText" cols="30" rows="10"></textarea>
-    <button onclick="checkCaption()">Submit</button>
-    <p id="adadeh" style="visibility: hidden">ini nilainya</p>
+  <body class="container mx-auto p-10">
+    <div class="grid md:grid-cols-2 grid-cols-1">
+      <div>
+        <label
+          for="message"
+          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+          >Your message</label
+        >
+        <textarea
+          oninput="checkCaption()"
+          id="inputText"
+          rows="10"
+          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          placeholder="Write your thoughts here..."
+        ></textarea>
+      </div>
+      <div class="flex flex-col px-5 justify-center">
+        <div
+          id="alertChar"
+          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <span class="font-medium">Characters long:</span>
+          <span id="charactersLong">0</span>/2200
+        </div>
+        <div
+          id="alertHashtag"
+          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <span class="font-medium">Hashtag tagged:</span>
+          <span id="hashtagTagged">0</span>/30
+        </div>
+        <div
+          id="alertUsername"
+          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+          role="alert"
+        >
+          <span class="font-medium">Username tagged:</span>
+          <span id="usernameTagged">0</span>/20
+        </div>
+      </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   </body>
   <script>
     var txt = document.getElementById("inputText");
     function checkCaption() {
-      const regex = /\W(\#[a-zA-Z]+\b)(?!;)|(\B@\w+)/gm;
+      const regex = /(^|\W)(#[a-z\d][\w-]*)|(\B@\w+)/gi;
       const str = txt.value;
       let m;
       let hashtag = 0;
@@ -28,16 +79,38 @@
 
         // The result can be accessed through the `m`-variable.
         m.forEach((match, groupIndex) => {
-          if (groupIndex == 1 && match != undefined) {
+          // console.log(`Found match, group ${groupIndex}: ${match}`);
+          if (groupIndex == 2 && match != undefined) {
             hashtag++;
-          } else if (groupIndex == 2 && match != undefined) {
+          } else if (groupIndex == 3 && match != undefined) {
             username++;
           }
         });
       }
-			console.log(`Characters long: ${str.length} / 2200 `);
-      console.log(`Hashtag tagged: ${hashtag} / 30 `);
-      console.log(`Username tagged: ${username} / 20`);
+			
+      $("#charactersLong").html(str.length);
+      $("#hashtagTagged").html(hashtag);
+      $("#usernameTagged").html(username);
+
+			// check if variables passing normal value
+      if (str.length > 2200) {
+        $("#alertChar").addClass("text-red-800 bg-red-50");
+      } else {
+        $("#alertChar").removeClass("text-red-800 bg-red-50");
+      }
+      if (hashtag > 30) {
+        $("#alertHashtag").addClass("text-red-800 bg-red-50");
+      } else {
+        $("#alertHashtag").removeClass("text-red-800 bg-red-50");
+      }
+      if (username > 30) {
+        $("#alertUsername").addClass("text-red-800 bg-red-50");
+      } else {
+        $("#alertUsername").removeClass("text-red-800 bg-red-50");
+      }
+      // console.log(`Characters long: ${str.length} / 2200 `);
+      // console.log(`Hashtag tagged: ${hashtag} / 30 `);
+      // console.log(`Username tagged: ${username} / 20`);
     }
   </script>
 </html>
