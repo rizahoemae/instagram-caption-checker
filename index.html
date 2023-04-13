@@ -4,8 +4,13 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="assets/logo.png" />
     <title>Instagram Caption Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <script
+      src="https://kit.fontawesome.com/8eb1ace72c.js"
+      crossorigin="anonymous"
+    ></script>
     <script
       src="https://code.jquery.com/jquery-3.6.4.js"
       integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
@@ -16,46 +21,264 @@
       rel="stylesheet"
     />
   </head>
-  <body class="container mx-auto p-10">
-    <div class="grid md:grid-cols-2 grid-cols-1">
-      <div>
-        <label
-          for="message"
-          class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
-          >Your message</label
+  <body class="relative">
+    <div
+      id="toast-confirm"
+      class="w-full flex hidden justify-center absolute top-0 p-2"
+    >
+      <div
+        id="toast-undo"
+        class="flex items-center w-full justify-between max-w-xs p-4 text-gray-500 bg-white rounded-lg shadow dark:text-gray-400 dark:bg-gray-800"
+        role="alert"
+      >
+        <div class="text-sm font-normal">Copied!</div>
+        <button
+          type="button"
+          class="bg-white text-gray-400 hover:text-gray-900 rounded-lg focus:ring-2 focus:ring-gray-300 p-1.5 hover:bg-gray-100 inline-flex h-8 w-8 dark:text-gray-500 dark:hover:text-white dark:bg-gray-800 dark:hover:bg-gray-700"
+          data-dismiss-target="#toast-undo"
+          aria-label="Close"
         >
-        <textarea
-          oninput="checkCaption()"
-          id="inputText"
-          rows="10"
-          class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-          placeholder="Write your thoughts here..."
-        ></textarea>
+          <span class="sr-only">Close</span>
+          <svg
+            aria-hidden="true"
+            class="w-5 h-5"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path
+              fill-rule="evenodd"
+              d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z"
+              clip-rule="evenodd"
+            ></path>
+          </svg>
+        </button>
       </div>
-      <div class="flex flex-col px-5 justify-center">
+    </div>
+
+    <div class="container mx-auto p-10">
+      <div class="grid md:grid-cols-2 grid-cols-1 gap-4">
         <div
-          id="alertChar"
-          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-          role="alert"
+          class="p-4 bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         >
-          <span class="font-medium">Characters long:</span>
-          <span id="charactersLong">0</span>/2200
+          <label
+            for="message"
+            class="block mb-2 text-sm font-medium text-gray-900 dark:text-white"
+            >Your caption</label
+          >
+          <textarea
+            oninput="checkCaption()"
+            id="inputText"
+            rows="10"
+            class="block p-2.5 w-full mb-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+            placeholder="Write your caption here..."
+          ></textarea>
+          <div class="flex space-x-2 justify-end">
+            <button
+              onclick="clearCaption()"
+              type="button"
+              class="text-gray-900 bg-white text-sm border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
+            >
+              Clear
+            </button>
+
+            <button
+              onclick="copyCaption()"
+              type="button"
+              class="text-white bg-blue-700 text-sm items-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              <i class="fa fa-copy mr-2"></i>Copy
+            </button>
+          </div>
         </div>
         <div
-          id="alertHashtag"
-          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-          role="alert"
+          class="flex flex-col justify-center bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         >
-          <span class="font-medium">Hashtag tagged:</span>
-          <span id="hashtagTagged">0</span>/30
+          <div
+            id="alertChar"
+            class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <span class="font-medium">Characters long:</span>
+            <span id="charactersLong">0</span>/2200
+          </div>
+          <div
+            id="alertHashtag"
+            class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <span class="font-medium">Hashtag tagged:</span>
+            <span id="hashtagTagged">0</span>/30
+          </div>
+          <div
+            id="alertDuplicateHashtag"
+            class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <span class="font-medium">Duplicate hashtag:</span>
+            <span id="duplicateHashtag">0</span>
+          </div>
+          <div
+            id="alertUsername"
+            class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+            role="alert"
+          >
+            <span class="font-medium">Username tagged:</span>
+            <span id="usernameTagged">0</span>/20
+          </div>
         </div>
         <div
-          id="alertUsername"
-          class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-          role="alert"
+          class="col-span-2 p-4 w-full bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         >
-          <span class="font-medium">Username tagged:</span>
-          <span id="usernameTagged">0</span>/20
+          <div class="mb-2">
+            <h1 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+              Well, hello!
+            </h1>
+            <p class="mb-2 text-gray-900 dark:text-white">
+							You probably having problem with your posts
+            </p>
+          </div>
+          <div class="mb-2">
+            <h1 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+              Caption Tips
+            </h1>
+            <h2 class="mb-2 font-semibold text-gray-900 dark:text-white">
+              Do's:
+            </h2>
+            <ul class="space-y-1 text-gray-500 list-inside dark:text-gray-400">
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Do use hashtags that are relevant to the theme of your content.
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Do check which hashtags your fans already use and follow.
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Do mix well-known and niche hashtags to broaden your
+                discoverability.
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Do use specific hashtags so your fans can easily search for your
+                content. You can even create your own!
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-green-500 dark:text-green-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Do keep the number of hashtags between 3-5.
+              </li>
+            </ul>
+            <h2 class="mb-2 font-semibold text-gray-900 dark:text-white">
+              Don'ts:
+            </h2>
+            <ul class="space-y-1 text-gray-500 list-inside dark:text-gray-400">
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Don't use hashtags that have nothing to do with your content
+                (e.g. #explorepage)
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Don't use overly generic hashtags. These will make it harder for
+                people to discover your content due to the volume of other
+                people using the hashtags
+              </li>
+              <li class="flex items-center">
+                <svg
+                  class="w-4 h-4 mr-1.5 text-red-500 dark:text-red-400 flex-shrink-0"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Don't use too many hashtags adding 10-20 hashtags will not help
+                you get additional distribution
+              </li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
@@ -63,10 +286,11 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.5/flowbite.min.js"></script>
   </body>
   <script>
-    var txt = document.getElementById("inputText");
+    var txt = $("#inputText");
     function checkCaption() {
-      const regex = /(^|\W)(#[a-z\d][\w-]*)|(\B@\w+)/gi;
-      const str = txt.value;
+      const regex = /^|(#[a-z\d][\w_]*)|(\B@\w+)/gi;
+      const uniqueHashtag = /\b(\w+)\b(?=.*\b\1\b)/gi;
+      const str = txt.val();
       let m;
       let hashtag = 0;
       let username = 0;
@@ -80,19 +304,22 @@
         // The result can be accessed through the `m`-variable.
         m.forEach((match, groupIndex) => {
           // console.log(`Found match, group ${groupIndex}: ${match}`);
-          if (groupIndex == 2 && match != undefined) {
+          if (groupIndex == 1 && match != undefined) {
+            if (match == match) {
+              console.log();
+            }
             hashtag++;
-          } else if (groupIndex == 3 && match != undefined) {
+          } else if (groupIndex == 2 && match != undefined) {
             username++;
           }
         });
       }
-			
+
       $("#charactersLong").html(str.length);
       $("#hashtagTagged").html(hashtag);
       $("#usernameTagged").html(username);
 
-			// check if variables passing normal value
+      // check if variables passing normal value
       if (str.length > 2200) {
         $("#alertChar").addClass("text-red-800 bg-red-50");
       } else {
@@ -108,9 +335,18 @@
       } else {
         $("#alertUsername").removeClass("text-red-800 bg-red-50");
       }
-      // console.log(`Characters long: ${str.length} / 2200 `);
-      // console.log(`Hashtag tagged: ${hashtag} / 30 `);
-      // console.log(`Username tagged: ${username} / 20`);
+    }
+    function copyCaption() {
+      $("textarea").select();
+      document.execCommand("copy");
+      $("#toast-confirm").removeClass("hidden").addClass("block");
+      setTimeout(() => {
+        $("#toast-confirm").removeClass("block").addClass("hidden");
+      }, 2000);
+    }
+    function clearCaption() {
+      txt.val("");
+      checkCaption();
     }
   </script>
 </html>
