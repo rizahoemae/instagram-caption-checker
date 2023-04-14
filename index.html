@@ -7,10 +7,10 @@
     <link rel="icon" href="assets/logo.png" />
     <title>Instagram Caption Checker</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script
+    <!-- <script
       src="https://kit.fontawesome.com/8eb1ace72c.js"
       crossorigin="anonymous"
-    ></script>
+    ></script> -->
     <script
       src="https://code.jquery.com/jquery-3.6.4.js"
       integrity="sha256-a9jBBRygX1Bh5lt8GZjXDzyOB+bWve9EiO7tROUtj/E="
@@ -67,7 +67,6 @@
             >Your caption</label
           >
           <textarea
-            oninput="checkCaption()"
             id="inputText"
             rows="10"
             class="block p-2.5 w-full mb-2 text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
@@ -75,19 +74,19 @@
           ></textarea>
           <div class="flex space-x-2 justify-end">
             <button
-              onclick="clearCaption()"
+              onclick="copyCaption()"
               type="button"
               class="text-gray-900 bg-white text-sm border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2 dark:bg-gray-800 dark:text-white dark:border-gray-600 dark:hover:bg-gray-700 dark:hover:border-gray-600 dark:focus:ring-gray-700"
             >
-              Clear
+              Copy
             </button>
 
             <button
-              onclick="copyCaption()"
+              onclick="checkCaption()"
               type="button"
               class="text-white bg-blue-700 text-sm items-center hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
             >
-              <i class="fa fa-copy mr-2"></i>Copy
+              Check Caption
             </button>
           </div>
         </div>
@@ -110,14 +109,14 @@
             <span class="font-medium">Hashtag tagged:</span>
             <span id="hashtagTagged">0</span>/30
           </div>
-          <div
+          <!-- <div
             id="alertDuplicateHashtag"
             class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
             role="alert"
           >
             <span class="font-medium">Duplicate hashtag:</span>
             <span id="duplicateHashtag">0</span>
-          </div>
+          </div> -->
           <div
             id="alertUsername"
             class="p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
@@ -128,23 +127,100 @@
           </div>
         </div>
         <div
-          class="col-span-2 p-4 w-full bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+          class="col-span-2 space-y-2 p-4 w-full bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
         >
-          <div class="mb-2">
-            <h1 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
+          <div class="space-y-2">
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">
               Well, hello!
             </h1>
-            <p class="mb-2 text-gray-900 dark:text-white">
-							You probably having problem with your posts
+            <p class="text-gray-900 dark:text-white">
+              Have you ever encountered a situation where you were unable to
+              send comments or captions, or they suddenly disappeared even
+              though you had scheduled them on
+              <a
+                href="https://business.facebook.com/"
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >Meta Business</a
+              >? This is probably due to one or more of these factors.
             </p>
+            <ul
+              class="space-y-1 text-gray-900 list-disc list-inside dark:text-gray-800"
+            >
+              <li>
+                Your account may have been flagged for violating Instagram's
+                Community Guidelines. In this case, Instagram may temporarily
+                restrict your account's ability to post comments or add
+                captions.
+              </li>
+              <li>
+                The post may have been deleted, which would prevent you from
+                adding a comment or caption.
+              </li>
+              <li>
+                The user who posted the content may have blocked you, which
+                would prevent you from commenting on their posts.
+              </li>
+              <li>
+                There may be a technical issue with the Instagram app or your
+                device that is preventing you from posting comments or captions.
+              </li>
+            </ul>
           </div>
-          <div class="mb-2">
-            <h1 class="mb-2 text-xl font-bold text-gray-900 dark:text-white">
-              Caption Tips
+          <hr class="my-4" />
+          <div class="space-y-2">
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+              Technical Issue on Instagram
             </h1>
-            <h2 class="mb-2 font-semibold text-gray-900 dark:text-white">
-              Do's:
-            </h2>
+            <p>
+              The last point that people may not know is what technical issues
+              often occur on Instagram. Here are some of the factors that
+              contribute to technical issues on Instagram.
+            </p>
+            <ul
+              class="space-y-1 text-gray-900 list-disc list-inside dark:text-gray-800"
+            >
+              <li>
+                Technical issues with the Instagram app: The Instagram app may
+                have glitches or bugs that are causing the error message to
+                appear when you try to edit the caption. Try updating the app,
+                clearing the app cache, or uninstalling and reinstalling the app
+                to see if that resolves the issue.
+              </li>
+              <li>
+                Account issues: There may be issues with your Instagram account
+                that are preventing you from editing the caption. Check to make
+                sure that your account is in good standing and that you have not
+                violated any of Instagram's community guidelines.
+              </li>
+              <li>
+                Character limit: Instagram has a limit of 2,200 characters for
+                captions, so if you are trying to add too much text to your
+                caption, you may encounter an error message. Try shortening or
+                simplifying your caption to see if that resolves the issue.
+              </li>
+              <li>
+                Hashtags or symbols: If you are using too many hashtags or
+                symbols in your caption, Instagram may view it as spam and
+                prevent you from editing it. Try removing some of the hashtags
+                or symbols to see if that resolves the issue.
+              </li>
+            </ul>
+          </div>
+          <hr class="my-4" />
+          <div class="space-y-2">
+            <h1 class="text-xl font-bold text-gray-900 dark:text-white">
+              Tips for using hahtags
+            </h1>
+            <p class="mb-2 text-gray-900 dark:text-white">
+              Based on this site
+              <a
+                href="https://business.facebook.com/"
+                class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+                >Meta Business</a
+              >
+            </p>
+
+            <h2 class="font-semibold text-gray-900 dark:text-white">Do's:</h2>
             <ul class="space-y-1 text-gray-500 list-inside dark:text-gray-400">
               <li class="flex items-center">
                 <svg
@@ -224,9 +300,7 @@
                 Do keep the number of hashtags between 3-5.
               </li>
             </ul>
-            <h2 class="mb-2 font-semibold text-gray-900 dark:text-white">
-              Don'ts:
-            </h2>
+            <h2 class="font-semibold text-gray-900 dark:text-white">Don'ts:</h2>
             <ul class="space-y-1 text-gray-500 list-inside dark:text-gray-400">
               <li class="flex items-center">
                 <svg
@@ -280,6 +354,20 @@
             </ul>
           </div>
         </div>
+        <div
+          class="col-span-2 space-y-2 p-4 w-full justify-center flex bg-white border border-gray-200 rounded-lg sm:p-8 dark:bg-gray-800 dark:border-gray-700"
+        >
+          <p>
+            This site is still under development. Have you found a bug or would
+            you like to give credits?
+            <a
+              href="https://www.instagram.com/daripadadikepala/"
+              target="_blank"
+              class="font-medium text-blue-600 dark:text-blue-500 hover:underline"
+              >Please contact us</a
+            >
+          </p>
+        </div>
       </div>
     </div>
 
@@ -288,8 +376,7 @@
   <script>
     var txt = $("#inputText");
     function checkCaption() {
-      const regex = /^|(#[a-z\d][\w_]*)|(\B@\w+)/gi;
-      const uniqueHashtag = /\b(\w+)\b(?=.*\b\1\b)/gi;
+      const regex = /(^|\W)(#[a-z\d][\w_]*)|(\B@\w+)/gi;
       const str = txt.val();
       let m;
       let hashtag = 0;
@@ -303,13 +390,10 @@
 
         // The result can be accessed through the `m`-variable.
         m.forEach((match, groupIndex) => {
-          // console.log(`Found match, group ${groupIndex}: ${match}`);
-          if (groupIndex == 1 && match != undefined) {
-            if (match == match) {
-              console.log();
-            }
+          console.log(`Found match, group ${groupIndex}: ${match}`);
+          if (groupIndex == 2 && match != undefined) {
             hashtag++;
-          } else if (groupIndex == 2 && match != undefined) {
+          } else if (groupIndex == 3 && match != undefined) {
             username++;
           }
         });
@@ -343,10 +427,6 @@
       setTimeout(() => {
         $("#toast-confirm").removeClass("block").addClass("hidden");
       }, 2000);
-    }
-    function clearCaption() {
-      txt.val("");
-      checkCaption();
     }
   </script>
 </html>
